@@ -11,6 +11,7 @@ class User(Base):
     username = Column(String, unique=True, index=True)
     email = Column(String, unique=True, index=True)
     hashed_password = Column(String)
+    
 
     # Add more fields as needed for users, customers, store owners, etc.
 
@@ -19,6 +20,8 @@ class Category(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
+
+    products = relationship("Product", back_populates="category")
 
 class Product(Base):
     __tablename__ = "products"
