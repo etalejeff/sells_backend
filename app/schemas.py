@@ -35,11 +35,12 @@ class User(UserBase):
 
 class CategoryBase(BaseModel):
     name: str
+    image: str
 
 class CategoryCreate(CategoryBase):
     id: Union[int, None] = None
-    created_at: Union[datetime, None] = None
-    updated_at: Union[datetime, None] = None
+    # created_at: Union[datetime, None] = None
+    # updated_at: Union[datetime, None] = None
 
 class CategoryUpdate(BaseModel):
     name: str = None
@@ -54,12 +55,13 @@ class Category(CategoryBase):
 class ProductBase(BaseModel):
     name: str
     price: float
+    image: str
     category_id: int
 
 class ProductCreate(ProductBase):
     id: Union[int, None] = None
-    created_at: Union[datetime, None] = None
-    updated_at: Union[datetime, None] = None
+    # created_at: Union[datetime, None] = None
+    # updated_at: Union[datetime, None] = None
 
 class ProductUpdate(BaseModel):
     name: str = None

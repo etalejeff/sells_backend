@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy.ext.asyncio import create_async_engine
 from app.models import Product
-from app.schemas import Product as ProductSchema
+from app.schemas import Product as ProductSchema, ProductCreate as ProductCreateSchema
 from typing import List
 from sqlalchemy.future import select
 
@@ -41,7 +41,10 @@ async def get_products(db: AsyncSession = Depends(get_db)):
 
     return products
 
-@router.post("/products")
-def create_product(db: Session = Depends(get_db)):
-    # Your logic to create a new product
-    return {"message": "Product created"}
+@router.post("/products", response_model=ProductSchema)
+async def create_product(product: ProductCreateSchema, db: AsyncSession = Depends(get_db)):
+    db_product = Product(**product.dict())
+    db.add(db_product)
+    await db.commit()
+    await db.refresh(db_product)
+    return db_product

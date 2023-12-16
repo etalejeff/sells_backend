@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy.ext.asyncio import create_async_engine
 from app.models import Category
-from app.schemas import Category as CategorySchema
+from app.schemas import Category as CategorySchema, CategoryCreate as CategoryCreateSchema
 from typing import List
 from sqlalchemy.future import select
 
@@ -40,3 +40,13 @@ async def get_products(db: AsyncSession = Depends(get_db)):
     products = result.scalars().all()
 
     return products
+
+
+
+@router.post("/categories", response_model=CategorySchema)
+async def create_category(category: CategoryCreateSchema, db: AsyncSession = Depends(get_db)):
+    db_category = Category(**category.dict())
+    db.add(db_category)
+    await db.commit()
+    await db.refresh(db_category)
+    return db_category

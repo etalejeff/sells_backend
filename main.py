@@ -1,5 +1,6 @@
 # main.py
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from app.auth import router as auth_router
 from app.products import router as products_router
 from app.users import router as cart_router
@@ -7,6 +8,16 @@ from app.categories import router as cart_router
 from app.database import Base, engine, sync_engine
 
 app = FastAPI()
+
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/")
 def read_root():
